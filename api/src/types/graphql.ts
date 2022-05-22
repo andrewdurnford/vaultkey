@@ -6,6 +6,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -21,10 +22,16 @@ export type ILoginInput = {
   password: Scalars['String'];
 };
 
+export type ILoginPayload = {
+  __typename?: 'LoginPayload';
+  token: Scalars['String'];
+  user: IUser;
+};
+
 export type IMutation = {
   __typename?: 'Mutation';
-  login?: Maybe<IUser>;
-  signup?: Maybe<IUser>;
+  login?: Maybe<ILoginPayload>;
+  signup?: Maybe<ISignupPayload>;
 };
 
 
@@ -45,6 +52,12 @@ export type IQuery = {
 export type ISignupInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type ISignupPayload = {
+  __typename?: 'SignupPayload';
+  token: Scalars['String'];
+  user: IUser;
 };
 
 export type IUser = {
@@ -125,9 +138,11 @@ export type IResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   LoginInput: ILoginInput;
+  LoginPayload: ResolverTypeWrapper<Omit<ILoginPayload, 'user'> & { user: IResolversTypes['User'] }>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   SignupInput: ISignupInput;
+  SignupPayload: ResolverTypeWrapper<Omit<ISignupPayload, 'user'> & { user: IResolversTypes['User'] }>;
   String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
 };
@@ -137,20 +152,34 @@ export type IResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   ID: Scalars['ID'];
   LoginInput: ILoginInput;
+  LoginPayload: Omit<ILoginPayload, 'user'> & { user: IResolversParentTypes['User'] };
   Mutation: {};
   Query: {};
   SignupInput: ISignupInput;
+  SignupPayload: Omit<ISignupPayload, 'user'> & { user: IResolversParentTypes['User'] };
   String: Scalars['String'];
   User: User;
 };
 
+export type ILoginPayloadResolvers<ContextType = Context, ParentType extends IResolversParentTypes['LoginPayload'] = IResolversParentTypes['LoginPayload']> = {
+  token?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<IResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type IMutationResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
-  login?: Resolver<Maybe<IResolversTypes['User']>, ParentType, ContextType, RequireFields<IMutationLoginArgs, 'input'>>;
-  signup?: Resolver<Maybe<IResolversTypes['User']>, ParentType, ContextType, RequireFields<IMutationSignupArgs, 'input'>>;
+  login?: Resolver<Maybe<IResolversTypes['LoginPayload']>, ParentType, ContextType, RequireFields<IMutationLoginArgs, 'input'>>;
+  signup?: Resolver<Maybe<IResolversTypes['SignupPayload']>, ParentType, ContextType, RequireFields<IMutationSignupArgs, 'input'>>;
 };
 
 export type IQueryResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
   user?: Resolver<Maybe<IResolversTypes['User']>, ParentType, ContextType>;
+};
+
+export type ISignupPayloadResolvers<ContextType = Context, ParentType extends IResolversParentTypes['SignupPayload'] = IResolversParentTypes['SignupPayload']> = {
+  token?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<IResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type IUserResolvers<ContextType = Context, ParentType extends IResolversParentTypes['User'] = IResolversParentTypes['User']> = {
@@ -160,8 +189,10 @@ export type IUserResolvers<ContextType = Context, ParentType extends IResolversP
 };
 
 export type IResolvers<ContextType = Context> = {
+  LoginPayload?: ILoginPayloadResolvers<ContextType>;
   Mutation?: IMutationResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;
+  SignupPayload?: ISignupPayloadResolvers<ContextType>;
   User?: IUserResolvers<ContextType>;
 };
 
