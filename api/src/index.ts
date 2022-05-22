@@ -2,8 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import { ApolloServer } from "apollo-server-express";
 import * as cors from "cors";
 import * as express from "express";
-import { resolvers } from "./resolvers";
-import { typeDefs } from "./typeDefs";
+import { resolvers } from "./utils/resolvers";
+import { typeDefs } from "./utils/typeDefs";
 
 const app = express();
 

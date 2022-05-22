@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "ts-node-dev src/index.ts"
+    "start": "ts-node-dev src/index.ts",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "prisma": {
     "schema": "src/schema.prisma"
@@ -10,11 +11,18 @@
     "apollo-server-express": "^3.8.2",
     "cors": "^2.8.5",
     "express": "^4.18.1",
-    "graphql": "^16.5.0"
+    "glob": "^8.0.3",
+    "graphql": "^16.5.0",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.6.2",
+    "@graphql-codegen/typescript": "^2.5.1",
+    "@graphql-codegen/typescript-resolvers": "^2.6.6",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
+    "@types/glob": "^7.2.0",
+    "@types/lodash": "^4.14.182",
     "@types/node": "^17.0.42",
     "prisma": "^3.15.1",
     "ts-node-dev": "^2.0.0",
