@@ -17,6 +17,20 @@ export type Scalars = {
   Float: number;
 };
 
+export type IItem = {
+  __typename?: 'Item';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+  password?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+};
+
+export type IItemCreateInput = {
+  name?: InputMaybe<Scalars['String']>;
+  password?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+};
+
 export type ILoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -30,8 +44,14 @@ export type ILoginPayload = {
 
 export type IMutation = {
   __typename?: 'Mutation';
+  itemCreate?: Maybe<IItem>;
   login?: Maybe<ILoginPayload>;
   signup?: Maybe<ISignupPayload>;
+};
+
+
+export type IMutationItemCreateArgs = {
+  input: IItemCreateInput;
 };
 
 
@@ -46,6 +66,7 @@ export type IMutationSignupArgs = {
 
 export type IQuery = {
   __typename?: 'Query';
+  items: Array<IItem>;
   user?: Maybe<IUser>;
 };
 
@@ -137,6 +158,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type IResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
+  Item: ResolverTypeWrapper<IItem>;
+  ItemCreateInput: IItemCreateInput;
   LoginInput: ILoginInput;
   LoginPayload: ResolverTypeWrapper<Omit<ILoginPayload, 'user'> & { user: IResolversTypes['User'] }>;
   Mutation: ResolverTypeWrapper<{}>;
@@ -151,6 +174,8 @@ export type IResolversTypes = {
 export type IResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   ID: Scalars['ID'];
+  Item: IItem;
+  ItemCreateInput: IItemCreateInput;
   LoginInput: ILoginInput;
   LoginPayload: Omit<ILoginPayload, 'user'> & { user: IResolversParentTypes['User'] };
   Mutation: {};
@@ -161,6 +186,14 @@ export type IResolversParentTypes = {
   User: User;
 };
 
+export type IItemResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Item'] = IResolversParentTypes['Item']> = {
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  password?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  username?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ILoginPayloadResolvers<ContextType = Context, ParentType extends IResolversParentTypes['LoginPayload'] = IResolversParentTypes['LoginPayload']> = {
   token?: Resolver<IResolversTypes['String'], ParentType, ContextType>;
   user?: Resolver<IResolversTypes['User'], ParentType, ContextType>;
@@ -168,11 +201,13 @@ export type ILoginPayloadResolvers<ContextType = Context, ParentType extends IRe
 };
 
 export type IMutationResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
+  itemCreate?: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IMutationItemCreateArgs, 'input'>>;
   login?: Resolver<Maybe<IResolversTypes['LoginPayload']>, ParentType, ContextType, RequireFields<IMutationLoginArgs, 'input'>>;
   signup?: Resolver<Maybe<IResolversTypes['SignupPayload']>, ParentType, ContextType, RequireFields<IMutationSignupArgs, 'input'>>;
 };
 
 export type IQueryResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
+  items?: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType>;
   user?: Resolver<Maybe<IResolversTypes['User']>, ParentType, ContextType>;
 };
 
@@ -189,6 +224,7 @@ export type IUserResolvers<ContextType = Context, ParentType extends IResolversP
 };
 
 export type IResolvers<ContextType = Context> = {
+  Item?: IItemResolvers<ContextType>;
   LoginPayload?: ILoginPayloadResolvers<ContextType>;
   Mutation?: IMutationResolvers<ContextType>;
   Query?: IQueryResolvers<ContextType>;
