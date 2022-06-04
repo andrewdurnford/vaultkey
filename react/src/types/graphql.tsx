@@ -85,6 +85,18 @@ export type User = {
   id: Scalars['ID'];
 };
 
+export type ItemsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ItemsQuery = { __typename?: 'Query', items: Array<{ __typename?: 'Item', id: string, name?: string | null, password?: string | null }> };
+
+export type ItemCreateMutationVariables = Exact<{
+  input: ItemCreateInput;
+}>;
+
+
+export type ItemCreateMutation = { __typename?: 'Mutation', itemCreate?: { __typename?: 'Item', id: string, name?: string | null, password?: string | null } | null };
+
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
 }>;
@@ -100,6 +112,77 @@ export type SignupMutationVariables = Exact<{
 export type SignupMutation = { __typename?: 'Mutation', signup?: { __typename?: 'SignupPayload', token: string, user: { __typename?: 'User', id: string, email: string } } | null };
 
 
+export const ItemsDocument = gql`
+    query Items {
+  items {
+    id
+    name
+    password
+  }
+}
+    `;
+
+/**
+ * __useItemsQuery__
+ *
+ * To run a query within a React component, call `useItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useItemsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useItemsQuery(baseOptions?: Apollo.QueryHookOptions<ItemsQuery, ItemsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ItemsQuery, ItemsQueryVariables>(ItemsDocument, options);
+      }
+export function useItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ItemsQuery, ItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ItemsQuery, ItemsQueryVariables>(ItemsDocument, options);
+        }
+export type ItemsQueryHookResult = ReturnType<typeof useItemsQuery>;
+export type ItemsLazyQueryHookResult = ReturnType<typeof useItemsLazyQuery>;
+export type ItemsQueryResult = Apollo.QueryResult<ItemsQuery, ItemsQueryVariables>;
+export const ItemCreateDocument = gql`
+    mutation ItemCreate($input: ItemCreateInput!) {
+  itemCreate(input: $input) {
+    id
+    name
+    password
+  }
+}
+    `;
+export type ItemCreateMutationFn = Apollo.MutationFunction<ItemCreateMutation, ItemCreateMutationVariables>;
+
+/**
+ * __useItemCreateMutation__
+ *
+ * To run a mutation, you first call `useItemCreateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useItemCreateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [itemCreateMutation, { data, loading, error }] = useItemCreateMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useItemCreateMutation(baseOptions?: Apollo.MutationHookOptions<ItemCreateMutation, ItemCreateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ItemCreateMutation, ItemCreateMutationVariables>(ItemCreateDocument, options);
+      }
+export type ItemCreateMutationHookResult = ReturnType<typeof useItemCreateMutation>;
+export type ItemCreateMutationResult = Apollo.MutationResult<ItemCreateMutation>;
+export type ItemCreateMutationOptions = Apollo.BaseMutationOptions<ItemCreateMutation, ItemCreateMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($input: LoginInput!) {
   login(input: $input) {

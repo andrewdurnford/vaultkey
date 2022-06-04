@@ -1,0 +1,15 @@
+query Items {
+  items {
+    id
+    name
+    password
+  }
+}
+
+mutation ItemCreate($input: ItemCreateInput!) {
+  itemCreate(input: $input) {
+    id
+    name
+    password
+  }
+}

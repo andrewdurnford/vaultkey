@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
 import { Link } from "react-router-dom";
+import { Items } from "./Items";
 
 function App() {
   const { token } = useAuth();
@@ -12,7 +13,7 @@ function App() {
       <Routes>
         {token ? (
           <>
-            <Route index element={<div>Hello World</div>} />
+            <Route index element={<Items />} />
           </>
         ) : (
           <>
