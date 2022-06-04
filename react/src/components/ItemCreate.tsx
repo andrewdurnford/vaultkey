@@ -4,6 +4,7 @@ import { useItemCreateMutation } from "../types/graphql";
 
 interface ItemCreateFormValues {
   name: string;
+  username: string;
   password: string;
 }
 
@@ -33,8 +34,8 @@ export function ItemCreate() {
 
   const { register, handleSubmit, reset } = useForm<ItemCreateFormValues>();
 
-  function onSubmit({ name, password }: ItemCreateFormValues) {
-    itemCreate({ variables: { input: { name, password } } });
+  function onSubmit({ name, username, password }: ItemCreateFormValues) {
+    itemCreate({ variables: { input: { name, username, password } } });
     reset();
   }
 
@@ -46,6 +47,8 @@ export function ItemCreate() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="name">Name</label>
         <input id="name" type="text" {...register("name")} />
+        <label htmlFor="username">Username</label>
+        <input id="username" type="text" {...register("username")} />
         <label htmlFor="password">Password</label>
         <input id="password" type="text" {...register("password")} />
         <button>Create</button>

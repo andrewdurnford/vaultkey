@@ -68,8 +68,8 @@ export function Items() {
                 </li>
                 <ul>
                   <li>
-                    <b>Name: </b>
-                    {item.name}
+                    <b>Username: </b>
+                    {item.username}
                   </li>
                   <li>
                     <b>Encrypted: </b>

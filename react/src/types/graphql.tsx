@@ -88,14 +88,14 @@ export type User = {
 export type ItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ItemsQuery = { __typename?: 'Query', items: Array<{ __typename?: 'Item', id: string, name?: string | null, password?: string | null }> };
+export type ItemsQuery = { __typename?: 'Query', items: Array<{ __typename?: 'Item', id: string, name?: string | null, username?: string | null, password?: string | null }> };
 
 export type ItemCreateMutationVariables = Exact<{
   input: ItemCreateInput;
 }>;
 
 
-export type ItemCreateMutation = { __typename?: 'Mutation', itemCreate?: { __typename?: 'Item', id: string, name?: string | null, password?: string | null } | null };
+export type ItemCreateMutation = { __typename?: 'Mutation', itemCreate?: { __typename?: 'Item', id: string, name?: string | null, username?: string | null, password?: string | null } | null };
 
 export type LoginMutationVariables = Exact<{
   input: LoginInput;
@@ -117,6 +117,7 @@ export const ItemsDocument = gql`
   items {
     id
     name
+    username
     password
   }
 }
@@ -153,6 +154,7 @@ export const ItemCreateDocument = gql`
   itemCreate(input: $input) {
     id
     name
+    username
     password
   }
 }
