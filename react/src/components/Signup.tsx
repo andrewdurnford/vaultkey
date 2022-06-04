@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useSignupMutation } from "../types/graphql";
 
@@ -9,18 +10,21 @@ interface SignupFormValues {
 
 export function Signup() {
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const [signup, { error }] = useSignupMutation({
     onError: (err) => console.error(err),
-    onCompleted: ({ signup: data }) => {
-      if (data?.user && data?.token) {
-        login(data);
-      }
-    },
   });
 
   function onSubmit({ email, password }: SignupFormValues) {
-    signup({ variables: { input: { email, password } } });
+    signup({ variables: { input: { email, password } } }).then(({ data }) => {
+      login({
+        token: data?.signup?.token ?? "",
+        email,
+        password,
+      });
+      navigate("/");
+    });
   }
 
   const { register, handleSubmit } = useForm<SignupFormValues>();

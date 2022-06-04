@@ -1,20 +1,17 @@
 import { createContext, useContext, useMemo, useState } from "react";
+import crypto from "crypto-js";
 
 // TODO: use graphql generated types
-interface User {
-  id: string;
-  email: string;
-  __typename?: string;
-}
 interface Login {
   token: string;
-  user: User;
+  email: string;
+  password: string;
   __typename?: string;
 }
 
 interface AuthContextType {
-  user?: User | null;
   token?: string | null;
+  secretKey?: string | null;
   login: (data: Login) => void;
   logout: () => void;
 }
@@ -26,29 +23,41 @@ interface AuthProps {
 }
 
 export function AuthProvider({ children }: AuthProps) {
-  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [secretKey, setSecretKey] = useState<string | null>(null);
 
-  function login({ token, user }: Login) {
-    setUser(user);
+  /** login callback */
+  function login({ token, email, password }: Login) {
     setToken(token);
     localStorage.setItem("token", token);
+
+    const key = crypto.PBKDF2(password, email, {
+      keySize: 32,
+      iterations: 100000,
+      hasher: crypto.algo.SHA256,
+    });
+
+    const base64Key = key.toString(crypto.enc.Base64)
+
+    console.log({base64Key})
+
+    setSecretKey(base64Key);
   }
 
   function logout() {
-    setUser(null);
     setToken(null);
+    setSecretKey(null);
     localStorage.removeItem("token");
   }
 
   const value = useMemo(
     () => ({
-      user,
       token,
       login,
       logout,
+      secretKey,
     }),
-    [user, token, login, logout]
+    [token, login, logout, secretKey]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
