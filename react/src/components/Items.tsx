@@ -4,28 +4,26 @@ import { ItemCreate } from "./ItemCreate";
 import crypto from "crypto-js";
 import { useNavigate } from "react-router-dom";
 
-function encrypt(message: string, secretKey: string, iv: crypto.lib.WordArray) {
-  // const iv = crypto.lib.WordArray.random(16);
-  const encryptedKey = crypto.enc.Base64.parse(secretKey);
+function encrypt(message: string, secretKey: string) {
+  const iv = crypto.lib.WordArray.random(16);
+  const key = crypto.enc.Base64.parse(secretKey);
 
-  const cipher = crypto.AES.encrypt(message, encryptedKey, {
-    iv: iv,
-  });
+  const { ciphertext } = crypto.AES.encrypt(message, key, { iv });
 
-  return cipher.ciphertext.toString(crypto.enc.Base64);
+  return crypto.enc.Base64.stringify(
+    crypto.enc.Hex.parse(iv.toString() + ciphertext.toString())
+  );
 }
 
-function decrypt(
-  ciphertext: string,
-  secretKey: string,
-  iv: crypto.lib.WordArray
-) {
-  // const iv = ciphertext.slice()
-  const encryptedKey = crypto.enc.Base64.parse(secretKey);
+function decrypt(ciphertext: string, secretKey: string) {
+  const wordArray = crypto.enc.Base64.parse(ciphertext);
+  const iv = crypto.enc.Hex.parse(wordArray.toString().substring(0, 32));
+  const decoded = crypto.enc.Base64.stringify(
+    crypto.enc.Hex.parse(wordArray.toString().substring(32))
+  );
+  const key = crypto.enc.Base64.parse(secretKey);
 
-  const decrypted = crypto.AES.decrypt(ciphertext, encryptedKey, {
-    iv: iv,
-  });
+  const decrypted = crypto.AES.decrypt(decoded, key, { iv });
 
   return decrypted.toString(crypto.enc.Utf8);
 }
@@ -53,19 +51,11 @@ export function Items() {
       ) : (
         <ul>
           {data?.items.map((item) => {
-            // TODO: append and slice iv from ciphertext
-            const iv = crypto.lib.WordArray.random(16);
-            const encrypted = encrypt(
-              item?.password ?? "password",
-              secretKey,
-              iv
-            );
-            const decrypted = decrypt(encrypted, secretKey, iv);
+            const encrypted = encrypt(item?.password ?? "password", secretKey);
+            const decrypted = decrypt(encrypted, secretKey);
             return (
-              <li>
-                <li>
-                  <h4>{item.name}</h4>
-                </li>
+              <li key={item.id}>
+                <h4>{item.name}</h4>
                 <ul>
                   <li>
                     <b>Username: </b>
