@@ -1,9 +1,19 @@
+import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 import { useItemsQuery } from "../types/graphql";
-import { decrypt, encrypt } from "../utils/encryption";
+import { decrypt } from "../utils/encryption";
 import { ItemCreate } from "./ItemCreate";
 
 export function Items() {
+  const navigate = useNavigate();
+  const { secretKey, logout } = useAuth();
   const { data, loading, error } = useItemsQuery();
+
+  if (!secretKey) {
+    logout();
+    navigate("/");
+  }
+
   if (loading) return <div>Loading...</div>;
 
   if (error) return <div>{error.message}</div>;
@@ -16,8 +26,9 @@ export function Items() {
       ) : (
         <ul>
           {data?.items.map((item) => {
-            const encrypted = !!item.password ? encrypt(item.password) : null;
-            const decrypted = !!encrypted ? decrypt(encrypted) : null;
+            const decrypted = !!item.password
+              ? decrypt(item.password, secretKey!)
+              : null;
             return (
               <li key={item.id}>
                 <h4>{item.name}</h4>
@@ -28,7 +39,7 @@ export function Items() {
                   </li>
                   <li>
                     <b>Password: </b>
-                    {encrypted}
+                    {item.password}
                   </li>
                   <li>
                     <b>Decrypted: </b>

@@ -1,6 +1,9 @@
 import { gql } from "@apollo/client";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 import { useItemCreateMutation } from "../types/graphql";
+import { encrypt } from "../utils/encryption";
 
 interface ItemCreateFormValues {
   name: string;
@@ -9,6 +12,14 @@ interface ItemCreateFormValues {
 }
 
 export function ItemCreate() {
+  const navigate = useNavigate();
+  const { secretKey, logout } = useAuth();
+
+  if (!secretKey) {
+    logout();
+    navigate("/");
+  }
+
   const [itemCreate, { error }] = useItemCreateMutation({
     onError: (err) => console.error(err),
     update(cache, { data }) {
@@ -35,7 +46,11 @@ export function ItemCreate() {
   const { register, handleSubmit, reset } = useForm<ItemCreateFormValues>();
 
   function onSubmit({ name, username, password }: ItemCreateFormValues) {
-    itemCreate({ variables: { input: { name, username, password } } });
+    itemCreate({
+      variables: {
+        input: { name, username, password: encrypt(password, secretKey!) },
+      },
+    });
     reset();
   }
 

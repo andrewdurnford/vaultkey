@@ -2,14 +2,7 @@ import crypto from "crypto-js";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-export function encrypt(message: string) {
-  const { secretKey, logout } = useAuth();
-  const navigate = useNavigate();
-
-  if (!secretKey) {
-    logout();
-    navigate("/");
-  }
+export function encrypt(message: string, secretKey: string) {
 
   const iv = crypto.lib.WordArray.random(16);
   const key = crypto.enc.Base64.parse(secretKey!);
@@ -21,15 +14,7 @@ export function encrypt(message: string) {
   );
 }
 
-export function decrypt(ciphertext: string) {
-  const { secretKey, logout } = useAuth();
-  const navigate = useNavigate();
-
-  if (!secretKey) {
-    logout();
-    navigate("/");
-  }
-
+export function decrypt(ciphertext: string, secretKey: string) {
   const wordArray = crypto.enc.Base64.parse(ciphertext);
   const iv = crypto.enc.Hex.parse(wordArray.toString().substring(0, 32));
   const decoded = crypto.enc.Base64.stringify(
