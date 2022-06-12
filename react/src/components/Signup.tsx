@@ -12,19 +12,19 @@ export function Signup() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [signup, { error }] = useSignupMutation({
-    onError: (err) => console.error(err),
-  });
+  const [signup, { error }] = useSignupMutation();
 
   function onSubmit({ email, password }: SignupFormValues) {
-    signup({ variables: { input: { email, password } } }).then(({ data }) => {
-      login({
-        token: data?.signup?.token ?? "",
-        email,
-        password,
-      });
-      navigate("/");
-    });
+    signup({ variables: { input: { email, password } } })
+      .then(({ data }) => {
+        login({
+          token: data?.signup?.token ?? "",
+          email,
+          password,
+        });
+        navigate("/");
+      })
+      .catch((e) => console.error(e));
   }
 
   const { register, handleSubmit } = useForm<SignupFormValues>();

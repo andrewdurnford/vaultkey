@@ -12,19 +12,21 @@ export function Login() {
   const { login: loginCallback } = useAuth();
   const navigate = useNavigate();
 
-  const [login, { error }] = useLoginMutation({
-    onError: (err) => console.error(err),
-  });
+  const [login, { error }] = useLoginMutation();
 
   function onSubmit({ email, password }: LoginFormValues) {
-    login({ variables: { input: { email, password } } }).then(({ data }) => {
-      loginCallback({
-        token: data?.login?.token ?? "",
-        email,
-        password,
-      });
-      navigate("/");
-    });
+    login({ variables: { input: { email, password } } })
+      .then(({ data }) => {
+        if (!!data) {
+          loginCallback({
+            token: data?.login?.token ?? "",
+            email,
+            password,
+          });
+          navigate("/");
+        }
+      })
+      .catch((e) => console.error(e));
   }
 
   const { register, handleSubmit } = useForm<LoginFormValues>();
