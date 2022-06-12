@@ -2,14 +2,15 @@ import useAuth from "../hooks/useAuth";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Signup } from "./Signup";
 import { Login } from "./Login";
-import { Link } from "react-router-dom";
 import { Items } from "./Items";
+import { Navbar } from "./Navbar";
 
 function App() {
   const { token } = useAuth();
 
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
         {token ? (
           <>
@@ -17,21 +18,7 @@ function App() {
           </>
         ) : (
           <>
-            <Route
-              index
-              element={
-                <>
-                  <ul>
-                    <li>
-                      <Link to="/login">Log in</Link>
-                    </li>
-                    <li>
-                      <Link to="signup">Sign up</Link>
-                    </li>
-                  </ul>
-                </>
-              }
-            />
+            <Route index element={<main>Hello World</main>} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
           </>
