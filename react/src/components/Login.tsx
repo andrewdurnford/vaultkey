@@ -2,7 +2,11 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useLoginMutation } from "../types/graphql";
+import { Alert } from "./Alert";
+import { Button } from "./Button";
+import { Input } from "./Input";
 import { Main } from "./Main";
+import { Stack } from "./Stack";
 
 interface LoginFormValues {
   email: string;
@@ -32,18 +36,27 @@ export function Login() {
 
   const { register, handleSubmit } = useForm<LoginFormValues>();
 
-  if (error) return <div>{error.message}</div>;
-
   return (
     <Main>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="email">Email</label>
-        <input id="email" type="text" {...register("email")} />
-        <label htmlFor="password">Password</label>
-        <input id="password" type="password" {...register("password")} />
-        <button>Login</button>
-      </form>
+      <Stack gap="s">
+        <h1>Login</h1>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack gap="m">
+            {error && <Alert>{error.message}</Alert>}
+            <Stack>
+              <label htmlFor="email">Email</label>
+              <Input id="email" type="text" {...register("email")} />
+            </Stack>
+            <Stack>
+              <label htmlFor="password">Password</label>
+              <Input id="password" type="password" {...register("password")} />
+            </Stack>
+            <div>
+              <Button>Log in</Button>
+            </div>
+          </Stack>
+        </form>
+      </Stack>
     </Main>
-  );
+  )
 }
