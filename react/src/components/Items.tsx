@@ -3,6 +3,7 @@ import useAuth from "../hooks/useAuth";
 import { useItemsQuery } from "../types/graphql";
 import { decrypt } from "../utils/encryption";
 import { ItemCreate } from "./ItemCreate";
+import { Main } from "./Main";
 
 export function Items() {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ export function Items() {
   if (error) return <div>{error.message}</div>;
 
   return (
-    <main>
+    <Main>
       <h1>Items</h1>
       {data?.items.length === 0 ? (
         <div>No items</div>
@@ -52,6 +53,6 @@ export function Items() {
         </ul>
       )}
       <ItemCreate />
-    </main>
+    </Main>
   );
 }

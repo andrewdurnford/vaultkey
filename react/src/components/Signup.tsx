@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useSignupMutation } from "../types/graphql";
+import { Main } from "./Main";
 
 interface SignupFormValues {
   email: string;
@@ -32,7 +33,7 @@ export function Signup() {
   if (error) return <div>{error.message}</div>;
 
   return (
-    <main>
+    <Main>
       <h1>Signup</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor="email">Email</label>
@@ -41,6 +42,6 @@ export function Signup() {
         <input id="password" type="password" {...register("password")} />
         <button>Signup</button>
       </form>
-    </main>
+    </Main>
   );
 }

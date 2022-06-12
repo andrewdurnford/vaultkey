@@ -5,6 +5,7 @@ import { Login } from "./Login";
 import { Items } from "./Items";
 import { Navbar } from "./Navbar";
 import { Logout } from "./Logout";
+import { Main } from "./Main";
 
 function App() {
   const { token } = useAuth();
@@ -20,7 +21,7 @@ function App() {
           </>
         ) : (
           <>
-            <Route index element={<main>Hello World</main>} />
+            <Route index element={<Main>Hello World</Main>} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
           </>
