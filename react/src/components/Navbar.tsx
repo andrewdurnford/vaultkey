@@ -2,11 +2,27 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import useAuth from "../hooks/useAuth";
 
+const List = styled.ul`
+  display: flex;
+  margin: 0;
+  padding: 0.5rem 0;
+`;
+
+const Item = styled.li`
+  padding: 0;
+  list-style-type: none;
+`;
+
 export const StyledNavLink = styled(NavLink).attrs({
   style: ({ isActive }) => (isActive ? { textDecoration: "underline" } : {}),
 })`
   color: black;
+  padding: 0 1rem;
   text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export function Navbar() {
@@ -14,25 +30,25 @@ export function Navbar() {
 
   return token ? (
     <nav>
-      <ul>
-        <li>
+      <List>
+        <Item>
           <StyledNavLink to="/">Vault</StyledNavLink>
-        </li>
-        <li>
+        </Item>
+        <Item>
           <StyledNavLink to="/logout">Log out</StyledNavLink>
-        </li>
-      </ul>
+        </Item>
+      </List>
     </nav>
   ) : (
     <nav>
-      <ul>
-        <li>
+      <List>
+        <Item>
           <StyledNavLink to="/login">Log in</StyledNavLink>
-        </li>
-        <li>
+        </Item>
+        <Item>
           <StyledNavLink to="/signup">Sign up</StyledNavLink>
-        </li>
-      </ul>
+        </Item>
+      </List>
     </nav>
   );
 }
