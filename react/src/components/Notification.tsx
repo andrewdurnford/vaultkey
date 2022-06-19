@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Alert = styled.div`
+export const Notification = styled.div`
   padding: 0.5rem 1rem;
   color: white;
   background-color: #ef4444;

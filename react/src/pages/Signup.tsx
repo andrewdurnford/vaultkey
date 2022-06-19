@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 import { useSignupMutation } from "../types/graphql";
-import { Alert } from "../components/Alert";
 import { Button } from "../components/Button";
+import { Container } from "../components/Container";
 import { Input } from "../components/Input";
-import { Main } from "../components/Main";
+import { Notification } from "../components/Notification";
 import { Stack } from "../components/Stack";
 
 interface SignupFormValues {
@@ -35,12 +35,12 @@ export function Signup() {
   const { register, handleSubmit } = useForm<SignupFormValues>();
 
   return (
-    <Main>
+    <Container as="main">
       <Stack gap="s">
         <h1>Signup</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack gap="m">
-            {error && <Alert>{error.message}</Alert>}
+            {error && <Notification>{error.message}</Notification>}
             <Stack>
               <label htmlFor="email">Email</label>
               <Input id="email" type="text" {...register("email")} />
@@ -55,6 +55,6 @@ export function Signup() {
           </Stack>
         </form>
       </Stack>
-    </Main>
+    </Container>
   );
 }

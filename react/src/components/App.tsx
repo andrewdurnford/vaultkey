@@ -4,7 +4,7 @@ import { Signup } from "../pages/Signup";
 import { Login } from "../pages/Login";
 import { Items } from "../pages/Items";
 import { Logout } from "../pages/Logout";
-import { Main } from "./Main";
+import { Container } from "./Container";
 import { Navbar } from "./Navbar";
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
           </>
         ) : (
           <>
-            <Route index element={<Main>Hello World</Main>} />
+            <Route index element={<Container>Hello World</Container>} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
           </>

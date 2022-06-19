@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import useAuth from "../hooks/useAuth";
 import { ItemCreate } from "../components/ItemCreate";
-import { Main } from "../components/Main";
+import { Container } from "../components/Container";
 import { Stack } from "../components/Stack";
 import { useItemsQuery } from "../types/graphql";
 import { decrypt } from "../utils/encryption";
@@ -29,7 +29,7 @@ export function Items() {
   if (error) return <div>{error.message}</div>;
 
   return (
-    <Main>
+    <Container as="main">
       <Stack gap="m">
         <h1>Items</h1>
         {data?.items.length === 0 ? (
@@ -55,6 +55,6 @@ export function Items() {
         )}
         <ItemCreate />
       </Stack>
-    </Main>
+    </Container>
   );
 }
