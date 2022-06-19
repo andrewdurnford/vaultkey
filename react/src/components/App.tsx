@@ -1,11 +1,11 @@
-import useAuth from "../hooks/useAuth";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Signup } from "./Signup";
-import { Login } from "./Login";
-import { Items } from "./Items";
-import { Navbar } from "./Navbar";
-import { Logout } from "./Logout";
+import useAuth from "../hooks/useAuth";
+import { Signup } from "../pages/Signup";
+import { Login } from "../pages/Login";
+import { Items } from "../pages/Items";
+import { Logout } from "../pages/Logout";
 import { Main } from "./Main";
+import { Navbar } from "./Navbar";
 
 function App() {
   const { token } = useAuth();

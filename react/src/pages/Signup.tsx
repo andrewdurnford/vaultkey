@@ -1,45 +1,43 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
-import { useLoginMutation } from "../types/graphql";
-import { Alert } from "./Alert";
-import { Button } from "./Button";
-import { Input } from "./Input";
-import { Main } from "./Main";
-import { Stack } from "./Stack";
+import { useSignupMutation } from "../types/graphql";
+import { Alert } from "../components/Alert";
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
+import { Main } from "../components/Main";
+import { Stack } from "../components/Stack";
 
-interface LoginFormValues {
+interface SignupFormValues {
   email: string;
   password: string;
 }
 
-export function Login() {
-  const { login: loginCallback } = useAuth();
+export function Signup() {
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [login, { error }] = useLoginMutation();
+  const [signup, { error }] = useSignupMutation();
 
-  function onSubmit({ email, password }: LoginFormValues) {
-    login({ variables: { input: { email, password } } })
+  function onSubmit({ email, password }: SignupFormValues) {
+    signup({ variables: { input: { email, password } } })
       .then(({ data }) => {
-        if (!!data) {
-          loginCallback({
-            token: data?.login?.token ?? "",
-            email,
-            password,
-          });
-          navigate("/");
-        }
+        login({
+          token: data?.signup?.token ?? "",
+          email,
+          password,
+        });
+        navigate("/");
       })
       .catch((e) => console.error(e));
   }
 
-  const { register, handleSubmit } = useForm<LoginFormValues>();
+  const { register, handleSubmit } = useForm<SignupFormValues>();
 
   return (
     <Main>
       <Stack gap="s">
-        <h1>Login</h1>
+        <h1>Signup</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack gap="m">
             {error && <Alert>{error.message}</Alert>}
@@ -52,11 +50,11 @@ export function Login() {
               <Input id="password" type="password" {...register("password")} />
             </Stack>
             <div>
-              <Button>Log in</Button>
+              <Button>Sign up</Button>
             </div>
           </Stack>
         </form>
       </Stack>
     </Main>
-  )
+  );
 }
