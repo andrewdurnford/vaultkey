@@ -1,5 +1,6 @@
 type Query {
   user: User
+  item(id: ID!): Item
   items: [Item!]!
 }
 

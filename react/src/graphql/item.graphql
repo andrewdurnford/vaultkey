@@ -1,9 +1,17 @@
+query Item($id: ID!) {
+  item(id: $id) {
+    id
+    name
+    username
+    password
+  }
+}
+
 query Items {
   items {
     id
     name
     username
-    password
   }
 }
 

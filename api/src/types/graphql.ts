@@ -66,8 +66,14 @@ export type IMutationSignupArgs = {
 
 export type IQuery = {
   __typename?: 'Query';
+  item?: Maybe<IItem>;
   items: Array<IItem>;
   user?: Maybe<IUser>;
+};
+
+
+export type IQueryItemArgs = {
+  id: Scalars['ID'];
 };
 
 export type ISignupInput = {
@@ -207,6 +213,7 @@ export type IMutationResolvers<ContextType = Context, ParentType extends IResolv
 };
 
 export type IQueryResolvers<ContextType = Context, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
+  item?: Resolver<Maybe<IResolversTypes['Item']>, ParentType, ContextType, RequireFields<IQueryItemArgs, 'id'>>;
   items?: Resolver<Array<IResolversTypes['Item']>, ParentType, ContextType>;
   user?: Resolver<Maybe<IResolversTypes['User']>, ParentType, ContextType>;
 };

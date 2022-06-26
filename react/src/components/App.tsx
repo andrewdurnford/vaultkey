@@ -6,6 +6,7 @@ import { Items } from "../pages/Items";
 import { Logout } from "../pages/Logout";
 import { Container } from "./Container";
 import { Navbar } from "./Navbar";
+import { Item } from "../pages/Item";
 
 function App() {
   const { token } = useAuth();
@@ -16,7 +17,9 @@ function App() {
       <Routes>
         {token ? (
           <>
-            <Route index element={<Items />} />
+            <Route index element={<Container>Hello World</Container>} />
+            <Route path="/vault" element={<Items />} />
+            <Route path="/vault/:itemId" element={<Item />} />
             <Route path="logout" element={<Logout />} />
           </>
         ) : (

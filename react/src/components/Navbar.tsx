@@ -32,7 +32,7 @@ export function Navbar() {
     <nav>
       <List>
         <Item>
-          <StyledNavLink to="/">Vault</StyledNavLink>
+          <StyledNavLink to="/vault">Vault</StyledNavLink>
         </Item>
         <Item>
           <StyledNavLink to="/logout">Log out</StyledNavLink>

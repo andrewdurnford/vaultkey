@@ -2,6 +2,20 @@ import { IResolvers } from "../types/graphql";
 
 export const resolvers: IResolvers = {
   Query: {
+    item: async (_, { id }, ctx) => {
+      const { userId } = ctx;
+
+      if (!userId) throw new Error("Unauthenticated");
+
+      return await ctx.prisma.item.findUnique({
+        where: {
+          id_userId: {
+            id,
+            userId,
+          },
+        },
+      });
+    },
     items: async (_, args, ctx) => {
       if (!ctx.userId) throw new Error("Unauthenticated");
 

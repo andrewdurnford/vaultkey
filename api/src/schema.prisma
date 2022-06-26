@@ -24,4 +24,6 @@ model Item {
   password String?
   userId   String
   user     User    @relation(fields: [userId], references: id)
+
+  @@unique([id, userId])
 }

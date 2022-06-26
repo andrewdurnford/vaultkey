@@ -64,8 +64,14 @@ export type MutationSignupArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  item?: Maybe<Item>;
   items: Array<Item>;
   user?: Maybe<User>;
+};
+
+
+export type QueryItemArgs = {
+  id: Scalars['ID'];
 };
 
 export type SignupInput = {
@@ -85,10 +91,17 @@ export type User = {
   id: Scalars['ID'];
 };
 
+export type ItemQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ItemQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, name?: string | null, username?: string | null, password?: string | null } | null };
+
 export type ItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ItemsQuery = { __typename?: 'Query', items: Array<{ __typename?: 'Item', id: string, name?: string | null, username?: string | null, password?: string | null }> };
+export type ItemsQuery = { __typename?: 'Query', items: Array<{ __typename?: 'Item', id: string, name?: string | null, username?: string | null }> };
 
 export type ItemCreateMutationVariables = Exact<{
   input: ItemCreateInput;
@@ -112,13 +125,50 @@ export type SignupMutationVariables = Exact<{
 export type SignupMutation = { __typename?: 'Mutation', signup?: { __typename?: 'SignupPayload', token: string, user: { __typename?: 'User', id: string, email: string } } | null };
 
 
+export const ItemDocument = gql`
+    query Item($id: ID!) {
+  item(id: $id) {
+    id
+    name
+    username
+    password
+  }
+}
+    `;
+
+/**
+ * __useItemQuery__
+ *
+ * To run a query within a React component, call `useItemQuery` and pass it any options that fit your needs.
+ * When your component renders, `useItemQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useItemQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useItemQuery(baseOptions: Apollo.QueryHookOptions<ItemQuery, ItemQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ItemQuery, ItemQueryVariables>(ItemDocument, options);
+      }
+export function useItemLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ItemQuery, ItemQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ItemQuery, ItemQueryVariables>(ItemDocument, options);
+        }
+export type ItemQueryHookResult = ReturnType<typeof useItemQuery>;
+export type ItemLazyQueryHookResult = ReturnType<typeof useItemLazyQuery>;
+export type ItemQueryResult = Apollo.QueryResult<ItemQuery, ItemQueryVariables>;
 export const ItemsDocument = gql`
     query Items {
   items {
     id
     name
     username
-    password
   }
 }
     `;

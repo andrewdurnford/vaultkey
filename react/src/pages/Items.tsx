@@ -1,11 +1,9 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import useAuth from "../hooks/useAuth";
 import { ItemCreate } from "../components/ItemCreate";
 import { Container } from "../components/Container";
 import { Stack } from "../components/Stack";
 import { useItemsQuery } from "../types/graphql";
-import { decrypt } from "../utils/encryption";
+import { Link } from "react-router-dom";
 
 const Card = styled.div`
   list-style-type: none;
@@ -15,14 +13,7 @@ const Card = styled.div`
 `;
 
 export function Items() {
-  const navigate = useNavigate();
-  const { secretKey, logout } = useAuth();
   const { data, loading, error } = useItemsQuery();
-
-  if (!secretKey) {
-    logout();
-    navigate("/");
-  }
 
   if (loading) return <div>Loading...</div>;
 
@@ -37,16 +28,11 @@ export function Items() {
         ) : (
           <Stack as="ul" gap="m">
             {data?.items.map((item) => {
-              const decrypted = !!item.password
-                ? decrypt(item.password, secretKey!)
-                : null;
               return (
                 <Card as="li" key={item.id}>
                   <Stack>
-                    <h3>{item.name}</h3>
+                    <Link to={item.id}>{item.name}</Link>
                     <span>{item.username}</span>
-                    <span>{item.password}</span>
-                    <span>{decrypted}</span>
                   </Stack>
                 </Card>
               );
